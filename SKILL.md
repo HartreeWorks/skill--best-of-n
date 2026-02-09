@@ -163,6 +163,3 @@ multi-model-responses/2026-02-08-1430-bon-slug/
 
 Uses the same API keys as ask-many-models (`.env` is symlinked). Model definitions are read from `/Users/ph/.claude/skills/ask-many-models/config.json`.
 
-## Update check
-
-This skill is managed by [skills.sh](https://skills.sh). To check for updates, run `npx skills update`.

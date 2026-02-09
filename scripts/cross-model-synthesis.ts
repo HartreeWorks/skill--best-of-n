@@ -1,6 +1,6 @@
 /**
  * Cross-model synthesis: combine best-of-n responses from multiple models.
- * Uses Claude Opus 4.5 with extended thinking (same as AMM).
+ * Uses Claude Opus 4.6 with extended thinking (same as AMM).
  */
 
 import { generateText } from 'ai';
