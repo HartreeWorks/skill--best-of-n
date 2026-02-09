@@ -21,38 +21,23 @@ Query each AI model N times with temperature variation, pick the best response p
 
 #### Step 2: Model selection
 
-Print this menu and wait for user input:
+First, fetch available presets and models (these are defined in ask-many-models config and may change):
 
-```
-Which models should I query?
-
-1. ⚡ Quick - Gemini 3 Flash, Grok 4.1 Fast, Claude 4.5 Sonnet (Recommended)
-2. 📊 Defaults - GPT-5.2 Thinking, Claude 4.5 Opus Thinking, Gemini 3 Pro, Grok 4.1
-3. 📊+ Comprehensive - Defaults + GPT-5.2 Pro (slow, extra compute)
-4. 🔧 Pick models - Choose individual models
-
-Enter a number (1-4):
+```bash
+cd /Users/ph/.claude/skills/best-of-n && yarn query presets 2>/dev/null
 ```
 
-Deep research and browser models are excluded—they don't benefit from temperature sampling.
+Present the presets as a numbered menu, plus a "Pick models" option. Add "(Recommended)" to the quick preset. Wait for user input.
 
-If the user selects **4 (Pick models)**, show eligible models:
+Deep research and browser models are automatically excluded—they don't benefit from temperature sampling.
 
+If the user selects **Pick models**, fetch the eligible model list:
+
+```bash
+cd /Users/ph/.claude/skills/best-of-n && yarn query models 2>/dev/null
 ```
-Eligible models:
-1. gemini-3-flash
-2. grok-4.1-non-reasoning
-3. claude-4.5-sonnet
-4. gpt-5.2-thinking
-5. claude-4.5-opus-thinking
-6. gemini-3-pro
-7. grok-4.1
-8. gpt-5.2
-9. gpt-5.2-pro (slow)
-10. claude-4.5-opus
 
-Enter numbers (e.g. 1,2,5):
-```
+Show the output and ask the user to enter model IDs (comma-separated).
 
 #### Step 3: Ask N and temperature
 
@@ -64,10 +49,7 @@ Show a cost warning: "This will make {models × N} API calls."
 
 #### Step 4: Run the query
 
-Map selections to model IDs:
-- **Quick**: `gemini-3-flash,grok-4.1-non-reasoning,claude-4.5-sonnet`
-- **Defaults**: `gpt-5.2-thinking,claude-4.5-opus-thinking,gemini-3-pro,grok-4.1`
-- **Comprehensive**: `gpt-5.2-thinking,claude-4.5-opus-thinking,gemini-3-pro,grok-4.1,gpt-5.2-pro`
+If the user chose a preset, use `--preset <name>`. If they picked individual models, use `--models <comma-separated-ids>`.
 
 Generate a slug from the prompt (lowercase, non-alphanumeric to hyphens, max 50 chars).
 
@@ -75,7 +57,20 @@ For brainstorming prompts, add `--brainstorm` to merge all unique ideas across s
 
 ```bash
 cd /Users/ph/.claude/skills/best-of-n && yarn query \
-  --models "<model-ids>" \
+  --preset <preset-name> \
+  --num-samples <n> \
+  --temperature <temp> \
+  --live-file "/Users/ph/.claude/skills/best-of-n/multi-model-responses/$(date +%Y-%m-%d-%H%M)-bon-<slug>.md" \
+  --synthesise \
+  --output-format both \
+  "<prompt>"
+```
+
+Or with explicit models:
+
+```bash
+cd /Users/ph/.claude/skills/best-of-n && yarn query \
+  --models "<model-id-1>,<model-id-2>,..." \
   --num-samples <n> \
   --temperature <temp> \
   --live-file "/Users/ph/.claude/skills/best-of-n/multi-model-responses/$(date +%Y-%m-%d-%H%M)-bon-<slug>.md" \
