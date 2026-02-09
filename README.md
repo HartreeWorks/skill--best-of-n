@@ -2,6 +2,8 @@
 
 A Claude Code skill for querying each AI model multiple times with temperature variation, picking the best response per model, then synthesising across models.
 
+![Best-of-N query result](bon-result.jpeg)
+
 ## Documentation
 
 See [SKILL.md](./SKILL.md) for complete documentation and usage instructions.
