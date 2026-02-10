@@ -13,7 +13,7 @@ import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const AMM_DIR = join(__dirname, '..', '..', 'ask-many-models');
+const BON_DIR = join(__dirname, '..');
 
 export interface ModelConfig {
   provider: 'openai' | 'google' | 'xai' | 'anthropic' | 'openai-deep' | 'gemini-deep';
@@ -54,10 +54,10 @@ export interface Config {
 }
 
 /**
- * Load config from AMM's config.json
+ * Load config from local config.json
  */
 export function loadConfig(): Config {
-  const configPath = join(AMM_DIR, 'config.json');
+  const configPath = join(BON_DIR, 'config.json');
   return JSON.parse(readFileSync(configPath, 'utf-8'));
 }
 

@@ -21,7 +21,7 @@ Query each AI model N times with temperature variation, pick the best response p
 
 #### Step 2: Model selection
 
-First, fetch available presets and models (these are defined in ask-many-models config and may change):
+First, fetch available presets and models (defined in `config.json`):
 
 ```bash
 cd /Users/ph/.claude/skills/best-of-n && yarn query presets 2>/dev/null
@@ -156,5 +156,5 @@ multi-model-responses/2026-02-08-1430-bon-slug/
 
 ## Configuration
 
-Uses the same API keys as ask-many-models (`.env` is symlinked). Model definitions are read from `/Users/ph/.claude/skills/ask-many-models/config.json`.
+API keys are stored in `.env` (gitignored). Model definitions and presets are in `config.json`.
 
