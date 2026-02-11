@@ -2,12 +2,12 @@
   "presets": {
     "quick": {
       "description": "Fast responses from efficient models",
-      "models": ["gemini-3-flash", "grok-4.1-non-reasoning", "claude-4.5-sonnet"],
+      "models": ["gemini-3-flash", "grok-4.1-non-reasoning", "claude-sonnet-4-5"],
       "timeout_seconds": 60
     },
     "comprehensive": {
       "description": "All default models plus GPT-5.2 Pro",
-      "models": ["gpt-5.2-thinking", "claude-4.6-opus-thinking", "gemini-3-pro", "grok-4.1", "gpt-5.2-pro"],
+      "models": ["gpt-5.2-thinking", "claude-opus-4-6-thinking", "gemini-3-pro", "grok-4.1", "gpt-5.2-pro"],
       "timeout_seconds": 300
     },
     "deep-research": {
@@ -17,12 +17,12 @@
     },
     "comprehensive-deep": {
       "description": "Quick models + deep research",
-      "models": ["gpt-5.2-thinking", "claude-4.6-opus-thinking", "gemini-3-pro", "grok-4.1", "openai-deep-research", "gemini-deep-research"],
+      "models": ["gpt-5.2-thinking", "claude-opus-4-6-thinking", "gemini-3-pro", "grok-4.1", "openai-deep-research", "gemini-deep-research"],
       "timeout_seconds": 3600
     },
     "brainstorm": {
       "description": "Brainstorming with powerful models (12 API calls)",
-      "models": ["gpt-5.2-thinking", "claude-4.6-opus-thinking", "gemini-3-pro", "grok-4.1"],
+      "models": ["gpt-5.2-thinking", "claude-opus-4-6-thinking", "gemini-3-pro", "grok-4.1"],
       "timeout_seconds": 300,
       "brainstorm": true,
       "num_samples": 3,
@@ -30,7 +30,7 @@
     },
     "brainstorm-intense": {
       "description": "Intense brainstorming with diverse models (35 API calls)",
-      "models": ["gpt-5.2-thinking", "claude-4.6-opus-thinking", "gemini-3-pro", "grok-4.1", "gpt-5.2-pro", "claude-4.5-sonnet", "gemini-3-flash"],
+      "models": ["gpt-5.2-thinking", "claude-opus-4-6-thinking", "gemini-3-pro", "grok-4.1", "gpt-5.2-pro", "claude-sonnet-4-5", "gemini-3-flash"],
       "timeout_seconds": 300,
       "brainstorm": true,
       "num_samples": 5,
@@ -38,7 +38,7 @@
     },
     "brainstorm-ultra": {
       "description": "Ultra creative: varies temperature 0.5–1.5 across samples (42 API calls)",
-      "models": ["gpt-5.2-thinking", "claude-4.6-opus-thinking", "gemini-3-pro", "grok-4.1", "gpt-5.2-pro", "claude-4.5-sonnet", "gemini-3-flash"],
+      "models": ["gpt-5.2-thinking", "claude-opus-4-6-thinking", "gemini-3-pro", "grok-4.1", "gpt-5.2-pro", "claude-sonnet-4-5", "gemini-3-flash"],
       "timeout_seconds": 300,
       "brainstorm": true,
       "num_samples": 6,
@@ -70,14 +70,14 @@
       "slow": true,
       "timeout_seconds": 3600
     },
-    "claude-4.6-opus": {
+    "claude-opus-4-6": {
       "provider": "anthropic",
       "model_id": "claude-opus-4-6",
       "display_name": "Claude 4.6 Opus",
       "type": "api",
       "max_tokens": 16000
     },
-    "claude-4.6-opus-thinking": {
+    "claude-opus-4-6-thinking": {
       "provider": "anthropic",
       "model_id": "claude-opus-4-6",
       "display_name": "Claude 4.6 Opus Thinking",
@@ -85,7 +85,7 @@
       "max_tokens": 32000,
       "reasoning": true
     },
-    "claude-4.5-sonnet": {
+    "claude-sonnet-4-5": {
       "provider": "anthropic",
       "model_id": "claude-sonnet-4-5-20250929",
       "display_name": "Claude 4.5 Sonnet",

@@ -171,7 +171,7 @@ multi-model-responses/2026-02-08-1430-bon-slug/
     │   ├── sample-0.md … sample-3.md
     │   ├── comparison.md
     │   └── best-response.md
-    └── claude-4.5-opus-thinking/
+    └── claude-opus-4-6-thinking/
         └── …
 ```
 
