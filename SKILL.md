@@ -30,8 +30,8 @@ This looks like a brainstorming task. I'll use brainstorm mode, which
 merges all unique ideas across samples instead of picking one best.
 
 1. Brainstorm (Recommended) — 4 models × 3 samples = 12 calls, T=1.0
-2. Brainstorm intense — 6 models × 5 samples = 30 calls, T=1.1
-3. Brainstorm ultra creative — 6 models × 6 samples = 36 calls, T varies 0.5→1.5
+2. Brainstorm intense — 7 models × 5 samples = 35 calls, T=1.1
+3. Brainstorm ultra creative — 7 models × 6 samples = 42 calls, T varies 0.5→1.5
 4. Custom — pick my own models and settings
 ```
 
