@@ -34,7 +34,7 @@ merges all unique ideas across samples instead of picking one best.
 | 1 | Brainstorm (Quick) | GPT-5.2, Opus 4.6, Gemini 3 Pro, Grok 4.1 | 3 | 1.0 | 12 | ~3 min |
 | 2 | Brainstorm intense | + GPT-5.2 Pro, Sonnet 4.5, Gemini 3 Flash | 5 | 1.1 | 35 | ~8 min |
 | 3 | Brainstorm ultra | Same 7 models | 6 | 0.5→1.5 | 42 | ~10 min |
-| 4 | Custom | Pick your own models and settings | | | | |
+| 4 | Custom | Pick your own models and settings |
 ```
 
 - Options 1–3: use `--preset brainstorm|brainstorm-intense|brainstorm-ultra`. Skip Step 3 (N and temperature come from the preset).
