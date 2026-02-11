@@ -19,6 +19,30 @@
       "description": "Quick models + deep research",
       "models": ["gpt-5.2-thinking", "claude-4.6-opus-thinking", "gemini-3-pro", "grok-4.1", "openai-deep-research", "gemini-deep-research"],
       "timeout_seconds": 3600
+    },
+    "brainstorm": {
+      "description": "Brainstorming with powerful models (12 API calls)",
+      "models": ["gpt-5.2-thinking", "claude-4.6-opus-thinking", "gemini-3-pro", "grok-4.1"],
+      "timeout_seconds": 300,
+      "brainstorm": true,
+      "num_samples": 3,
+      "temperature": 1.0
+    },
+    "brainstorm-intense": {
+      "description": "Intense brainstorming with diverse models (30 API calls)",
+      "models": ["gpt-5.2-thinking", "claude-4.6-opus-thinking", "gemini-3-pro", "grok-4.1", "claude-4.5-sonnet", "gemini-3-flash"],
+      "timeout_seconds": 300,
+      "brainstorm": true,
+      "num_samples": 5,
+      "temperature": 1.1
+    },
+    "brainstorm-ultra": {
+      "description": "Ultra creative: varies temperature 0.5–1.5 across samples (36 API calls)",
+      "models": ["gpt-5.2-thinking", "claude-4.6-opus-thinking", "gemini-3-pro", "grok-4.1", "claude-4.5-sonnet", "gemini-3-flash"],
+      "timeout_seconds": 300,
+      "brainstorm": true,
+      "num_samples": 6,
+      "temperature_range": [0.5, 1.5]
     }
   },
   "models": {

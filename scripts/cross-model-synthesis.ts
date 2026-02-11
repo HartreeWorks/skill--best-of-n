@@ -135,7 +135,14 @@ Create a **comprehensive master list** of all ideas, organised into thematic clu
 
 ### Output format
 
-For each theme:
+**Start with the top picks**, then give the full breakdown:
+
+### Top 5 most promising ideas
+[Ranked list with 1-sentence justification each — this is the most important section]
+
+---
+
+Then for each theme:
 
 ### [Theme name]
 
@@ -150,9 +157,6 @@ Then at the end:
 - Total unique ideas across all models: [count]
 - Ideas proposed by multiple models independently: [count] (highest confidence)
 - Ideas unique to one model: [count] (most novel)
-
-### Top 5 most promising ideas
-[Brief ranked list with 1-sentence justification each]
 
 ---
 

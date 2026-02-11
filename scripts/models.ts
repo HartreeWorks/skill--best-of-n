@@ -40,6 +40,10 @@ export interface PresetConfig {
   timeout_seconds?: number;
   async?: boolean;
   requires_browser?: boolean;
+  brainstorm?: boolean;
+  num_samples?: number;
+  temperature?: number;
+  temperature_range?: [number, number];
 }
 
 export interface Config {
@@ -137,6 +141,13 @@ export function listPresets(config: Config): void {
     console.log(`  ${name}`);
     console.log(`    ${preset.description}`);
     console.log(`    Models: ${models.join(', ')}`);
+    if (preset.brainstorm) {
+      const n = preset.num_samples ?? 4;
+      const tempStr = preset.temperature_range
+        ? `${preset.temperature_range[0]}→${preset.temperature_range[1]} (varies)`
+        : String(preset.temperature ?? 0.8);
+      console.log(`    Brainstorm: N=${n}, T=${tempStr}, ${models.length * n} API calls`);
+    }
     console.log('');
   }
 }

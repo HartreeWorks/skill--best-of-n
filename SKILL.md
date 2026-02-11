@@ -19,7 +19,28 @@ Query each AI model N times with temperature variation, pick the best response p
 
 **B) Mid-conversation** (substantive prior discussion): Draft a comprehensive prompt that captures full context (2-4 paragraphs minimum), includes relevant file contents or code, states the core question clearly, and specifies what format/depth of response is useful. Save to `/tmp/bon-prompt-draft.md`, open it, and show the user for approval.
 
-#### Step 2: Model selection
+#### Step 2: Brainstorm detection
+
+Check whether the prompt suggests brainstorming—look for keywords like "brainstorm", "ideas", "come up with", "creative", "possibilities", or any open-ended ideation task.
+
+**If brainstorming detected**, present:
+
+```
+This looks like a brainstorming task. I'll use brainstorm mode, which
+merges all unique ideas across samples instead of picking one best.
+
+1. Brainstorm (Recommended) — 4 models × 3 samples = 12 calls, T=1.0
+2. Brainstorm intense — 6 models × 5 samples = 30 calls, T=1.1
+3. Brainstorm ultra creative — 6 models × 6 samples = 36 calls, T varies 0.5→1.5
+4. Custom — pick my own models and settings
+```
+
+- Options 1–3: use `--preset brainstorm|brainstorm-intense|brainstorm-ultra`. Skip Step 3 (N and temperature come from the preset).
+- Option 4: fall through to normal model selection (Step 2b) and add `--brainstorm` to the command.
+
+**If not brainstorming**, proceed to Step 2b.
+
+#### Step 2b: Model selection
 
 First, fetch available presets and models (defined in `config.json`):
 
@@ -27,7 +48,7 @@ First, fetch available presets and models (defined in `config.json`):
 cd /Users/ph/.claude/skills/best-of-n && yarn query presets 2>/dev/null
 ```
 
-Present the presets as a numbered menu, plus a "Pick models" option. Add "(Recommended)" to the quick preset. Wait for user input.
+Present the non-brainstorm presets as a numbered menu, plus a "Pick models" option. Add "(Recommended)" to the quick preset. Wait for user input.
 
 Deep research and browser models are automatically excluded—they don't benefit from temperature sampling.
 

@@ -448,13 +448,27 @@ async function runQuery(
   },
 ): Promise<void> {
   const config = loadConfig();
-  const numSamples = parseInt(options.numSamples || '4', 10);
-  const temperature = parseFloat(options.temperature || '0.8');
-  const timeoutSeconds = parseInt(options.timeout || '180', 10);
+
+  // Resolve preset config first, then cascade: CLI flag > preset value > hardcoded default
+  const presetName = (!options.models) ? (options.preset || 'quick') : undefined;
+  const presetConfig = presetName ? config.presets[presetName] : undefined;
+
+  const numSamples = parseInt(
+    options.numSamples ?? String(presetConfig?.num_samples ?? 4), 10
+  );
+  const temperature = parseFloat(
+    options.temperature ?? String(presetConfig?.temperature ?? 0.8)
+  );
+  const timeoutSeconds = parseInt(
+    options.timeout ?? String(presetConfig?.timeout_seconds ?? 180), 10
+  );
   const timeoutMs = timeoutSeconds * 1000;
   const outputFormat = (options.outputFormat || 'markdown') as OutputFormat;
   const shouldSynthesise = options.synthesise !== false;
-  const brainstorm = options.brainstorm === true;
+  const brainstorm = options.brainstorm ?? presetConfig?.brainstorm ?? false;
+
+  // Temperature range for ultra creative mode
+  const temperatureRange = presetConfig?.temperature_range ?? null;
 
   // Determine models
   let modelNames: string[];
@@ -470,8 +484,7 @@ async function runQuery(
       process.exit(1);
     }
   } else {
-    const presetName = options.preset || 'quick';
-    modelNames = getPresetModels(presetName, config);
+    modelNames = getPresetModels(presetName!, config);
     if (modelNames.length === 0) {
       console.error(
         `No eligible models in preset "${presetName}". Deep research and browser models are excluded.`,
@@ -484,7 +497,10 @@ async function runQuery(
   console.log(
     `\n\x1b[36m🎲 Best-of-N${brainstorm ? ' (brainstorm)' : ''}: ${modelNames.length} models × ${numSamples} samples = ${totalCalls} API calls\x1b[0m`,
   );
-  console.log(`Temperature: ${temperature} | Timeout: ${timeoutSeconds}s per call`);
+  const tempDisplay = temperatureRange
+    ? `${temperatureRange[0]}→${temperatureRange[1]} (varies per sample)`
+    : String(temperature);
+  console.log(`Temperature: ${tempDisplay} | Timeout: ${timeoutSeconds}s per call`);
 
   // Warn about slow models
   const slowModels = modelNames.filter((m) => config.models[m]?.slow);
@@ -516,6 +532,16 @@ async function runQuery(
     const displayName = mc?.display_name || modelName;
     const modelTimeout = (mc?.timeout_seconds || timeoutSeconds) * 1000;
 
+    // Per-sample temperature variation (for ultra creative mode)
+    const getTemperatureForSample = (sampleIndex: number): number => {
+      if (temperatureRange) {
+        const [min, max] = temperatureRange;
+        if (numSamples <= 1) return (min + max) / 2;
+        return min + (max - min) * (sampleIndex / (numSamples - 1));
+      }
+      return temperature;
+    };
+
     // Run N samples with small stagger between same-provider calls
     const samplePromises: Promise<SingleQueryResult>[] = [];
     for (let i = 0; i < numSamples; i++) {
@@ -528,7 +554,7 @@ async function runQuery(
               prompt,
               config,
               modelTimeout,
-              temperature,
+              getTemperatureForSample(i),
             );
             tracker.sampleComplete(modelName, result.status === 'success');
             resolve(result);
