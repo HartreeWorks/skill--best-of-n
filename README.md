@@ -2,6 +2,8 @@
 
 A Claude Code skill for querying each AI model multiple times with temperature variation, picking the best response per model, then synthesising across models.
 
+![Best-of-N brainstorm preset picker](bon-brainstorm.jpeg)
+
 ![Best-of-N query result](bon-result.jpeg)
 
 ## Documentation
