@@ -93,16 +93,21 @@ class BonProgressTracker extends EventEmitter {
   private models: Map<string, ModelSampleProgress> = new Map();
   private startTime: number;
   private renderInterval?: ReturnType<typeof setInterval>;
+  private lineCount = 0;
+  private maxNameLen: number;
 
   constructor(modelNames: string[], numSamples: number, config: Config) {
     super();
     this.startTime = Date.now();
 
+    let longest = 0;
     for (const name of modelNames) {
       const mc = config.models[name];
+      const displayName = mc?.display_name || name;
+      if (displayName.length > longest) longest = displayName.length;
       this.models.set(name, {
         modelName: name,
-        displayName: mc?.display_name || name,
+        displayName,
         total: numSamples,
         completed: 0,
         failed: 0,
@@ -110,6 +115,7 @@ class BonProgressTracker extends EventEmitter {
         comparisonDone: false,
       });
     }
+    this.maxNameLen = longest;
   }
 
   start(): void {
@@ -122,7 +128,8 @@ class BonProgressTracker extends EventEmitter {
       clearInterval(this.renderInterval);
       this.renderInterval = undefined;
     }
-    process.stdout.write('\x1b[2K\r');
+    // Final render to show completed state
+    this.render();
   }
 
   sampleComplete(modelName: string, success: boolean): void {
@@ -154,37 +161,71 @@ class BonProgressTracker extends EventEmitter {
   }
 
   private render(): void {
-    const reset = '\x1b[0m';
+    const R = '\x1b[0m';
     const dim = '\x1b[2m';
     const green = '\x1b[32m';
     const yellow = '\x1b[33m';
     const red = '\x1b[31m';
     const cyan = '\x1b[36m';
 
-    const parts: string[] = [];
+    const lines: string[] = [];
+    let totalDone = 0;
+    let totalAll = 0;
+    let allFinished = true;
 
     for (const m of this.models.values()) {
       const done = m.completed + m.failed;
+      totalDone += done;
+      totalAll += m.total;
 
+      // Progress bar: █ for success, ✗ for failed, ░ for pending
+      const bar =
+        green + '█'.repeat(m.completed) + R +
+        (m.failed > 0 ? red + '█'.repeat(m.failed) + R : '') +
+        dim + '░'.repeat(m.total - done) + R;
+
+      // Status label
+      let icon: string;
+      let status: string;
       if (m.comparisonDone) {
-        parts.push(`${green}✓${reset} ${m.displayName}`);
+        icon = `${green}✓${R}`;
+        status = `${green}done${R}`;
       } else if (m.comparing) {
-        parts.push(`${cyan}⚡${reset} ${m.displayName} ${dim}comparing${reset}`);
+        icon = `${cyan}⚡${R}`;
+        status = `${cyan}comparing…${R}`;
+        allFinished = false;
       } else if (done === m.total) {
-        parts.push(`${yellow}◐${reset} ${m.displayName} (${m.completed}/${m.total})`);
+        icon = `${yellow}◐${R}`;
+        status = `${dim}waiting…${R}`;
+        allFinished = false;
       } else {
-        const color = done > 0 ? yellow : dim;
-        parts.push(`${color}◐${reset} ${m.displayName} (${done}/${m.total})`);
+        icon = done > 0 ? `${yellow}◐${R}` : `${dim}◐${R}`;
+        status = `${dim}${done}/${m.total}${R}`;
+        allFinished = false;
       }
 
       if (m.failed > 0) {
-        parts[parts.length - 1] += ` ${red}${m.failed}✗${reset}`;
+        status += `  ${red}${m.failed} failed${R}`;
       }
+
+      const name = m.displayName.padEnd(this.maxNameLen);
+      lines.push(`  ${icon} ${name}  ${bar}  ${status}`);
     }
 
-    const elapsed = `${dim}[${this.getElapsedTime()}]${reset}`;
-    const line = `${parts.join('  ')}  ${elapsed}`;
-    process.stdout.write(`\x1b[2K\r${line}`);
+    // Summary footer
+    const pct = totalAll > 0 ? Math.round((totalDone / totalAll) * 100) : 0;
+    lines.push(`${dim}  ⏱ ${this.getElapsedTime()}  ·  ${totalDone}/${totalAll} samples (${pct}%)${R}`);
+
+    // Move cursor up to overwrite previous render
+    if (this.lineCount > 0) {
+      process.stdout.write(`\x1b[${this.lineCount}A`);
+    }
+
+    for (const line of lines) {
+      process.stdout.write(`\x1b[2K${line}\n`);
+    }
+
+    this.lineCount = lines.length;
   }
 
   allComplete(): boolean {
