@@ -23,22 +23,21 @@ Query each AI model N times with temperature variation, pick the best response p
 
 Check whether the prompt suggests brainstorming—look for keywords like "brainstorm", "ideas", "come up with", "creative", "possibilities", or any open-ended ideation task.
 
-**If brainstorming detected**, present:
+**If brainstorming detected**, say "Brainstorm mode: merges all unique ideas across samples instead of picking one best." Then use `AskUserQuestion` to present the presets:
 
-```
-This looks like a brainstorming task. I'll use brainstorm mode, which
-merges all unique ideas across samples instead of picking one best.
+- **Question:** "Which brainstorm preset?"
+- **Header:** "Preset"
+- **Options:**
+  1. Label: `Quick (Recommended)` — Description: `4 models × 3 samples = 12 calls (~3 min). GPT-5.2, Opus 4.6, Gemini 3 Pro, Grok 4.1`
+  2. Label: `Intense` — Description: `7 models × 5 samples = 35 calls (~8 min). GPT-5.2, Opus 4.6, Gemini 3 Pro, Grok 4.1, GPT-5.2 Pro, Sonnet 4.5, Gemini 3 Flash. Temp 1.1`
+  3. Label: `Ultra` — Description: `7 models × 6 samples = 42 calls (~10 min). Same 7 models as Intense. Temperature sweep 0.5→1.5`
+  4. Label: `Custom` — Description: `Pick your own models and settings`
 
-| # | Preset | Models | N | Temp | Calls | Est. time |
-|---|--------|--------|---|------|-------|-----------|
-| 1 | Brainstorm (Quick) | GPT-5.2, Opus 4.6, Gemini 3 Pro, Grok 4.1 | 3 | 1.0 | 12 | ~3 min |
-| 2 | Brainstorm intense | + GPT-5.2 Pro, Sonnet 4.5, Gemini 3 Flash | 5 | 1.1 | 35 | ~8 min |
-| 3 | Brainstorm ultra | Same 7 models | 6 | 0.5→1.5 | 42 | ~10 min |
-| 4 | Custom | Pick your own models and settings |
-```
-
-- Options 1–3: use `--preset brainstorm|brainstorm-intense|brainstorm-ultra`. Skip Step 3 (N and temperature come from the preset).
-- Option 4: fall through to normal model selection (Step 2b) and add `--brainstorm` to the command.
+Mapping user selection to CLI:
+- Quick → `--preset brainstorm`. Skip Steps 2b and 3, go straight to Step 4.
+- Intense → `--preset brainstorm-intense`. Skip Steps 2b and 3, go straight to Step 4.
+- Ultra → `--preset brainstorm-ultra`. Skip Steps 2b and 3, go straight to Step 4.
+- Custom → Fall through to Step 2b to pick models, then Step 3 for N/temperature. Add `--brainstorm` to the final command.
 
 **If not brainstorming**, proceed to Step 2b.
 
