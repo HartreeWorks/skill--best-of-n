@@ -1,6 +1,6 @@
 /**
  * Desktop notification wrapper using terminal-notifier (macOS)
- * Simplified from ask-many-models
+ * Desktop notifications via terminal-notifier (macOS)
  */
 
 import { execFileSync } from 'child_process';

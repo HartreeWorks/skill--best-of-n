@@ -1,6 +1,6 @@
 /**
  * Model definitions and Vercel AI SDK provider setup
- * Adapted from ask-many-models, with getEligibleModels() for best-of-n filtering
+ * Model definitions, Vercel AI SDK provider setup, and eligibility filtering for best-of-n
  */
 
 import { openai } from '@ai-sdk/openai';

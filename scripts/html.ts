@@ -1,6 +1,6 @@
 /**
  * HTML generation from markdown content
- * Extracted from ask-many-models query.ts
+ * HTML report generation for best-of-n results
  */
 
 import { marked } from 'marked';
