@@ -4,3 +4,6 @@ dist/
 multi-model-responses/
 .DS_Store
 .claude/
+
+# Private local data (not published)
+data/

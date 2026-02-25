@@ -28,8 +28,8 @@ Check whether the prompt suggests brainstorming—look for keywords like "brains
 - **Question:** "Which brainstorm preset?"
 - **Header:** "Preset"
 - **Options:**
-  1. Label: `Quick (Recommended)` — Description: `4 models × 3 samples = 12 calls (~3 min). GPT-5.2, Opus 4.6, Gemini 3 Pro, Grok 4.1`
-  2. Label: `Intense` — Description: `7 models × 5 samples = 35 calls (~8 min). GPT-5.2, Opus 4.6, Gemini 3 Pro, Grok 4.1, GPT-5.2 Pro, Sonnet 4.5, Gemini 3 Flash. Temp 1.1`
+  1. Label: `Quick (Recommended)` — Description: `4 models × 3 samples = 12 calls (~3 min). GPT-5.2, Opus 4.6, Gemini 3.1 Pro, Grok 4.1`
+  2. Label: `Intense` — Description: `7 models × 5 samples = 35 calls (~8 min). GPT-5.2, Opus 4.6, Gemini 3.1 Pro, Grok 4.1, GPT-5.2 Pro, Sonnet 4.5, Gemini 3 Flash. Temp 1.1`
   3. Label: `Ultra` — Description: `7 models × 6 samples = 42 calls (~10 min). Same 7 models as Intense. Temperature sweep 0.5→1.5`
   4. Label: `Custom` — Description: `Pick your own models and settings`
 
