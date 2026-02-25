@@ -51,7 +51,7 @@ function generateOutputDir(prompt: string): string {
   const now = new Date();
   const timestamp = now.toISOString().slice(0, 16).replace(/[T:]/g, '-');
   const slug = generateSlug(prompt);
-  return join(SKILL_DIR, 'multi-model-responses', `${timestamp}-bon-${slug}`);
+  return join(SKILL_DIR, 'data', 'multi-model-responses', `${timestamp}-bon-${slug}`);
 }
 
 function normaliseHeadings(text: string): string {

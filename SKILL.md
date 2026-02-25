@@ -82,7 +82,7 @@ cd /Users/ph/.claude/skills/best-of-n && yarn query \
   --preset <preset-name> \
   --num-samples <n> \
   --temperature <temp> \
-  --live-file "/Users/ph/.claude/skills/best-of-n/multi-model-responses/$(date +%Y-%m-%d-%H%M)-bon-<slug>.md" \
+  --live-file "/Users/ph/.claude/skills/best-of-n/data/multi-model-responses/$(date +%Y-%m-%d-%H%M)-bon-<slug>.md" \
   --synthesise \
   --output-format both \
   "<prompt>"
@@ -95,7 +95,7 @@ cd /Users/ph/.claude/skills/best-of-n && yarn query \
   --models "<model-id-1>,<model-id-2>,..." \
   --num-samples <n> \
   --temperature <temp> \
-  --live-file "/Users/ph/.claude/skills/best-of-n/multi-model-responses/$(date +%Y-%m-%d-%H%M)-bon-<slug>.md" \
+  --live-file "/Users/ph/.claude/skills/best-of-n/data/multi-model-responses/$(date +%Y-%m-%d-%H%M)-bon-<slug>.md" \
   --synthesise \
   --output-format both \
   "<prompt>"
@@ -164,7 +164,7 @@ yarn query presets
 ## Output structure
 
 ```
-multi-model-responses/2026-02-08-1430-bon-slug/
+data/multi-model-responses/2026-02-08-1430-bon-slug/
 ├── responses.json
 ├── synthesis.md
 └── per-model/
