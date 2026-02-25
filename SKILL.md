@@ -43,7 +43,7 @@ Mapping user selection to CLI:
 
 #### Step 2b: Model selection
 
-First, fetch available presets and models (defined in `config.json`):
+First, fetch available presets and models (defined in `models.json`):
 
 ```bash
 cd /Users/ph/.claude/skills/best-of-n && yarn query presets 2>/dev/null
@@ -82,7 +82,6 @@ cd /Users/ph/.claude/skills/best-of-n && yarn query \
   --preset <preset-name> \
   --num-samples <n> \
   --temperature <temp> \
-  --live-file "/Users/ph/.claude/skills/best-of-n/data/multi-model-responses/$(date +%Y-%m-%d-%H%M)-bon-<slug>.md" \
   --synthesise \
   --output-format both \
   "<prompt>"
@@ -95,17 +94,18 @@ cd /Users/ph/.claude/skills/best-of-n && yarn query \
   --models "<model-id-1>,<model-id-2>,..." \
   --num-samples <n> \
   --temperature <temp> \
-  --live-file "/Users/ph/.claude/skills/best-of-n/data/multi-model-responses/$(date +%Y-%m-%d-%H%M)-bon-<slug>.md" \
   --synthesise \
   --output-format both \
   "<prompt>"
 ```
 
+The script auto-generates an output directory at `data/model-outputs/<timestamp>-bon-<slug>/` containing `results.md`, `results.html`, and per-model responses.
+
 #### Step 5: Open results
 
-Open the live file (HTML version if available, otherwise markdown):
+Open the results file (HTML version if available, otherwise markdown):
 ```bash
-open "<live-file-path with .md replaced by .html>"
+open "<output-dir>/results.html"
 ```
 
 ---
@@ -148,7 +148,6 @@ yarn query presets
 | `-m, --models <list>` | — | Comma-separated model IDs |
 | `-p, --preset <name>` | quick | Preset: quick, comprehensive |
 | `-t, --timeout <seconds>` | 180 | Timeout per call |
-| `-l, --live-file <path>` | — | Live markdown file |
 | `--output-format <format>` | markdown | markdown, html, both |
 | `-s, --synthesise` | true | Run cross-model synthesis |
 | `-B, --brainstorm` | false | Merge all unique ideas instead of picking one best |
@@ -164,9 +163,10 @@ yarn query presets
 ## Output structure
 
 ```
-data/multi-model-responses/2026-02-08-1430-bon-slug/
+data/model-outputs/2026-02-08-1430-bon-slug/
+├── results.md          # Live results + synthesis (markdown)
+├── results.html        # Live results + synthesis (HTML)
 ├── responses.json
-├── synthesis.md
 └── per-model/
     ├── gpt-5.2-thinking/
     │   ├── sample-0.md … sample-3.md
@@ -178,5 +178,5 @@ data/multi-model-responses/2026-02-08-1430-bon-slug/
 
 ## Configuration
 
-API keys are stored in `.env` (gitignored). Model definitions and presets are in `config.json`.
+API keys are stored in `.env` (gitignored). Model definitions and presets are in `models.json` (shipped). To customise, create a `config.json` with just the keys you want to override—it merges on top of `models.json`.
 

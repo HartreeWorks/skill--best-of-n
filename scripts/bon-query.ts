@@ -51,7 +51,7 @@ function generateOutputDir(prompt: string): string {
   const now = new Date();
   const timestamp = now.toISOString().slice(0, 16).replace(/[T:]/g, '-');
   const slug = generateSlug(prompt);
-  return join(SKILL_DIR, 'data', 'multi-model-responses', `${timestamp}-bon-${slug}`);
+  return join(SKILL_DIR, 'data', 'model-outputs', `${timestamp}-bon-${slug}`);
 }
 
 function normaliseHeadings(text: string): string {
@@ -463,11 +463,6 @@ function saveResults(
     writeFileSync(join(modelDir, 'comparison.md'), mr.comparisonMarkdown);
   }
 
-  // Synthesis
-  if (synthesis) {
-    writeFileSync(join(outputDir, 'synthesis.md'), synthesis);
-  }
-
   console.log(`\nResults saved to: ${outputDir}`);
 }
 
@@ -481,7 +476,6 @@ async function runQuery(
     models?: string;
     preset?: string;
     timeout?: string;
-    liveFile?: string;
     outputFormat?: string;
     synthesise?: boolean;
     brainstorm?: boolean;
@@ -551,13 +545,12 @@ async function runQuery(
     );
   }
 
-  // Create live file
-  const liveFilePath = options.liveFile;
-  if (liveFilePath) {
-    mkdirSync(dirname(liveFilePath), { recursive: true });
-    createLiveFile(liveFilePath, prompt, modelNames, numSamples, temperature, config);
-    console.log(`Live file: ${liveFilePath}`);
-  }
+  // Generate output dir and live file path early so everything goes in one place
+  const outputDir = options.output || generateOutputDir(prompt);
+  mkdirSync(outputDir, { recursive: true });
+  const liveFilePath = join(outputDir, 'results.md');
+  createLiveFile(liveFilePath, prompt, modelNames, numSamples, temperature, config);
+  console.log(`Live file: ${liveFilePath}`);
   console.log('');
 
   // Start progress
@@ -629,14 +622,12 @@ async function runQuery(
       tracker.setComparisonDone(modelName);
 
       // Update live file with error
-      if (liveFilePath) {
-        updateModelSection(
-          liveFilePath,
-          displayName,
-          `**Error:** All ${numSamples} samples failed.\n\n${errors}`,
-        );
-        syncHtmlFile(liveFilePath, outputFormat);
-      }
+      updateModelSection(
+        liveFilePath,
+        displayName,
+        `**Error:** All ${numSamples} samples failed.\n\n${errors}`,
+      );
+      syncHtmlFile(liveFilePath, outputFormat);
       return;
     }
 
@@ -673,7 +664,7 @@ async function runQuery(
     allModelResults.push(modelResult);
 
     // Update live file
-    if (liveFilePath) {
+    {
       let section = '';
 
       if (brainstorm && modelResult.brainstormSummary) {
@@ -734,10 +725,8 @@ async function runQuery(
     try {
       synthesis = await synthesiseBestResponses(prompt, bestResponses, brainstorm);
 
-      if (liveFilePath) {
-        insertSynthesisInLiveFile(liveFilePath, synthesis);
-        syncHtmlFile(liveFilePath, outputFormat);
-      }
+      insertSynthesisInLiveFile(liveFilePath, synthesis);
+      syncHtmlFile(liveFilePath, outputFormat);
     } catch (err) {
       console.error(
         'Cross-model synthesis failed:',
@@ -748,8 +737,8 @@ async function runQuery(
   }
 
   // Save results
-  const outputDir = options.output || generateOutputDir(prompt);
   saveResults(outputDir, prompt, numSamples, temperature, allModelResults, synthesis);
+
 
   // Print summary
   console.log(`\n\x1b[1m📊 Results Summary\x1b[0m\n`);
@@ -773,9 +762,7 @@ async function runQuery(
   console.log('');
 
   // Notify
-  if (liveFilePath) {
-    notifyBonComplete(allModelResults.length, numSamples, liveFilePath);
-  }
+  notifyBonComplete(allModelResults.length, numSamples, liveFilePath);
 }
 
 // ── CLI ──────────────────────────────────────────────────────────────────────
@@ -796,7 +783,6 @@ program
   .option('-m, --models <list>', 'Comma-separated model IDs')
   .option('-p, --preset <name>', 'Preset (quick, comprehensive — no deep research)')
   .option('-t, --timeout <seconds>', 'Timeout per call in seconds', '180')
-  .option('-l, --live-file <path>', 'Markdown file to update live')
   .option('--output-format <format>', 'Output format: markdown, html, both', 'markdown')
   .option('-s, --synthesise', 'Run cross-model synthesis (default: true)')
   .option('--no-synthesise', 'Skip cross-model synthesis')

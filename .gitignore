@@ -1,9 +1,10 @@
 node_modules/
 dist/
 .env
-data/multi-model-responses/
+data/model-outputs/
 .DS_Store
 .claude/
+config.json
 
 # Private local data (not published)
 data/

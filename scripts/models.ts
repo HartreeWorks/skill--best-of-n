@@ -8,7 +8,7 @@ import { google } from '@ai-sdk/google';
 import { xai } from '@ai-sdk/xai';
 import { createAnthropic } from '@ai-sdk/anthropic';
 import type { LanguageModel } from 'ai';
-import { readFileSync } from 'fs';
+import { readFileSync, existsSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -58,11 +58,24 @@ export interface Config {
 }
 
 /**
- * Load config from local config.json
+ * Load config: models.json (shipped) + optional config.json (user overrides)
  */
 export function loadConfig(): Config {
-  const configPath = join(BON_DIR, 'config.json');
-  return JSON.parse(readFileSync(configPath, 'utf-8'));
+  const modelsPath = join(BON_DIR, 'models.json');
+  const base: Config = JSON.parse(readFileSync(modelsPath, 'utf-8'));
+
+  const overridePath = join(BON_DIR, 'config.json');
+  if (existsSync(overridePath)) {
+    const overrides = JSON.parse(readFileSync(overridePath, 'utf-8'));
+    return {
+      models: { ...base.models, ...overrides.models },
+      presets: { ...base.presets, ...overrides.presets },
+      defaults: { ...base.defaults, ...overrides.defaults },
+      synthesis_depths: { ...base.synthesis_depths, ...overrides.synthesis_depths },
+    };
+  }
+
+  return base;
 }
 
 /**
