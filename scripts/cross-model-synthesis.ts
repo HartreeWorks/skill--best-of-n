@@ -58,7 +58,7 @@ Create an **executive synthesis** that:
 1. **Identify consensus**: What do multiple models agree on? This is likely reliable.
 
 2. **Highlight unique insights**: What did only one model mention that's valuable?
-   - Tag the source: "[From GPT-5.2]" or similar
+   - Tag the source: "[From GPT-5.4]" or similar
    - Don't discard these just because others didn't mention them
 
 3. **Flag disagreements**: Where do models contradict?

@@ -28,8 +28,8 @@ Check whether the prompt suggests brainstorming—look for keywords like "brains
 - **Question:** "Which brainstorm preset?"
 - **Header:** "Preset"
 - **Options:**
-  1. Label: `Quick (Recommended)` — Description: `4 models × 3 samples = 12 calls (~3 min). GPT-5.2, Opus 4.6, Gemini 3.1 Pro, Grok 4.1`
-  2. Label: `Intense` — Description: `7 models × 5 samples = 35 calls (~8 min). GPT-5.2, Opus 4.6, Gemini 3.1 Pro, Grok 4.1, GPT-5.2 Pro, Sonnet 4.5, Gemini 3 Flash. Temp 1.1`
+  1. Label: `Quick (Recommended)` — Description: `4 models × 3 samples = 12 calls (~3 min). GPT-5.4, Opus 4.6, Gemini 3.1 Pro, Grok 4.1`
+  2. Label: `Intense` — Description: `7 models × 5 samples = 35 calls (~8 min). GPT-5.4, Opus 4.6, Gemini 3.1 Pro, Grok 4.1, GPT-5.4 Pro, Sonnet 4.5, Gemini 3 Flash. Temp 1.1`
   3. Label: `Ultra` — Description: `7 models × 6 samples = 42 calls (~10 min). Same 7 models as Intense. Temperature sweep 0.5→1.5`
   4. Label: `Custom` — Description: `Pick your own models and settings`
 
@@ -132,7 +132,7 @@ yarn query "What are the pros and cons of TypeScript?"
 
 # With options
 yarn query -n 4 -T 0.8 -p quick "Your question"
-yarn query -n 2 -m gpt-5.2,gemini-3-flash "Your question"
+yarn query -n 2 -m gpt-5.4,gemini-3-flash "Your question"
 
 # List eligible models and presets
 yarn query models
@@ -168,7 +168,7 @@ data/model-outputs/2026-02-08-1430-bon-slug/
 ├── results.html        # Live results + synthesis (HTML)
 ├── responses.json
 └── per-model/
-    ├── gpt-5.2-thinking/
+    ├── gpt-5.4-thinking/
     │   ├── sample-0.md … sample-3.md
     │   ├── comparison.md
     │   └── best-response.md

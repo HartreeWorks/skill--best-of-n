@@ -5,7 +5,7 @@
  * Usage:
  *   yarn query "What are the pros and cons of TypeScript?"
  *   yarn query -n 4 -T 0.8 -p quick "Explain quantum computing"
- *   yarn query -n 2 -m gpt-5.2,gemini-3-flash "Your question"
+ *   yarn query -n 2 -m gpt-5.4,gemini-3-flash "Your question"
  */
 
 import { config as dotenvConfig } from 'dotenv';
